@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تغذية الحيوان - الصف الحادي عشر</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Tajawal', 'sans-serif'],
+                    },
+                    colors: {
+                        // لوحة ألوان جديدة: ألوان الطبيعة (أخضر غابات، بيج، برتقالي محروق)
+                        primary: '#2e7d32', // أخضر غامق رئيسي
+                        secondary: '#1b5e20', // أخضر داكن جداً للقائمة
+                        accent: '#f57c00', // برتقالي للتمييز
+                        background: '#f1f8e9', // خلفية فاتحة جداً مريحة للعين
+                        surface: '#ffffff', // لون الكروت
+                        textMain: '#1c1c1c',
+                        textSub: '#424242'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f1f8e9; /* لون خلفية عام */
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .fade-in {
+            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .nav-btn.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-right: 4px solid #f57c00;
+        }
+        .image-banner {
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+            border-radius: 1rem 1rem 0 0;
+        }
+        /* تحسين مظهر الكروت */
+        .content-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .content-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-background text-textMain min-h-screen flex flex-col md:flex-row overflow-hidden">
+
+    <!-- Sidebar Navigation -->
+    <aside class="w-full md:w-72 bg-secondary text-white flex-shrink-0 flex flex-col shadow-2xl z-20">
+        <div class="p-8 text-center bg-primary border-b border-green-800 relative overflow-hidden">
+            <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+            <h1 class="text-3xl font-extrabold relative z-10 tracking-wide"><i class="fas fa-seedling mr-2 text-accent"></i>علوم التغذية</h1>
+            <p class="text-xs text-green-100 mt-2 tracking-wider relative z-10">للصف الحادي عشر</p>
+        </div>
+        
+        <nav class="flex-1 overflow-y-auto p-4 space-y-2">
+            <button onclick="showSection('intro')" class="nav-btn active w-full text-right p-3 rounded-lg hover:bg-green-800 transition-all duration-300 flex items-center group" id="btn-intro">
+                <span class="w-8 flex justify-center"><i class="fas fa-home group-hover:text-accent transition-colors"></i></span>
+                <span class="mr-2 font-medium">الرئيسية</span>
+            </button>
+            <button onclick="showSection('protein')" class="nav-btn w-full text-right p-3 rounded-lg hover:bg-green-800 transition-all duration-300 flex items-center group" id="btn-protein">
+                <span class="w-8 flex justify-center"><i class="fas fa-drumstick-bite group-hover:text-accent transition-colors"></i></span>
+                <span class="mr-2 font-medium">البروتين</span>
+            </button>
+            <button onclick="showSection('carbs')" class="nav-btn w-full text-right p-3 rounded-lg hover:bg-green-800 transition-all duration-300 flex items-center group" id="btn-carbs">
+                <span class="w-8 flex justify-center"><i class="fas fa-bread-slice group-hover:text-accent transition-colors"></i></span>
+                <span class="mr-2 font-medium">الكربوهيدرات</span>
+            </button>
+            <button onclick="showSection('fats')" class="nav-btn w-full text-right p-3 rounded-lg hover:bg-green-800 transition-all duration-300 flex items-center group" id="btn-fats">
+                <span class="w-8 flex justify-center"><i class="fas fa-oil-can group-hover:text-accent transition-colors"></i></span>
+                <span class="mr-2 font-medium">الدهون</span>
+            </button>
+            <button onclick="showSection('minerals')" class="nav-btn w-full text-right p-3 rounded-lg hover:bg-green-800 transition-all duration-300 flex items-center group" id="btn-minerals">
+                <span class="w-8 flex justify-center"><i class="fas fa-vial group-hover:text-accent transition-colors"></i></span>
+                <span class="mr-2 font-medium">المعادن والفيتامينات</span>
+            </button>
+            <button onclick="showSection('water')" class="nav-btn w-full text-right p-3 rounded-lg hover:bg-green-800 transition-all duration-300 flex items-center group" id="btn-water">
+                <span class="w-8 flex justify-center"><i class="fas fa-tint group-hover:text-accent transition-colors"></i></span>
+                <span class="mr-2 font-medium">الماء</span>
+            </button>
+            <button onclick="showSection('systems')" class="nav-btn w-full text-right p-3 rounded-lg hover:bg-green-800 transition-all duration-300 flex items-center group" id="btn-systems">
+                <span class="w-8 flex justify-center"><i class="fas fa-cow group-hover:text-accent transition-colors"></i></span>
+                <span class="mr-2 font-medium">نظم التغذية</span>
+            </button>
+            <div class="pt-6 mt-6 border-t border-green-800">
+                <button onclick="startQuiz()" class="w-full text-center py-4 px-4 rounded-xl bg-accent hover:bg-orange-600 text-white font-bold transition-all shadow-lg hover:shadow-orange-500/50 transform hover:-translate-y-1 flex items-center justify-center gap-2">
+                    <i class="fas fa-clipboard-check text-xl"></i>
+                    <span>اختبر معلوماتك</span>
+                </button>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 relative overflow-y-auto h-screen p-4 md:p-10" id="main-scroll">
+        
+        <!-- Welcome Section -->
+        <section id="intro" class="section-content max-w-5xl mx-auto fade-in">
+            <div class="bg-surface rounded-3xl shadow-xl overflow-hidden mb-8 border border-gray-100">
+                <div class="relative h-64 bg-gray-200">
+                    <img src="https://images.unsplash.com/photo-1500595046743-cd271d694d30?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="مزرعة حيوانات" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
+                        <div class="p-8 text-white w-full">
+                            <h2 class="text-4xl font-extrabold mb-2">مرحباً بك في تطبيق تغذية الحيوان</h2>
+                            <p class="text-lg opacity-90 font-light">دليلك الشامل لمادة العلوم الزراعية - الصف الحادي عشر.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="p-8 md:p-10">
+                    <p class="text-textSub text-lg leading-loose mb-8">
+                        يغطي هذا التطبيق جميع الجوانب الأساسية لتغذية الحيوانات، بدءاً من المكونات الغذائية الأساسية (البروتينات، الكربوهيدرات، الدهون) وصولاً إلى الفيتامينات والمعادن وأهمية الماء، بالإضافة إلى شرح مفصل للفروقات في عمليات الهضم بين المجترات والحيوانات أحادية المعدة.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="p-6 bg-green-50 rounded-2xl border border-green-100 flex items-start hover:shadow-md transition-shadow">
+                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-primary text-2xl ml-4 flex-shrink-0">
+                                <i class="fas fa-book-open"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-gray-800 mb-2 text-xl">محتوى تعليمي شامل</h3>
+                                <p class="text-sm text-gray-600 leading-relaxed">شرح مفصل ومبسط للمادة العلمية مدعم بالصور.</p>
+                            </div>
+                        </div>
+                        <div class="p-6 bg-orange-50 rounded-2xl border border-orange-100 flex items-start hover:shadow-md transition-shadow">
+                            <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center text-accent text-2xl ml-4 flex-shrink-0">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-gray-800 mb-2 text-xl">اختبار تفاعلي</h3>
+                                <p class="text-sm text-gray-600 leading-relaxed">12 سؤالاً لتقييم فهمك للمادة مع تصحيح فوري.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-10 text-center">
+                        <button onclick="showSection('protein')" class="bg-primary text-white px-8 py-4 rounded-xl hover:bg-green-700 transition shadow-lg hover:shadow-green-500/30 inline-flex items-center text-lg font-bold">
+                            ابدأ رحلة التعلم <i class="fas fa-arrow-left mr-3"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dynamic Content Container -->
+        <div id="content-container" class="max-w-5xl mx-auto space-y-8"></div>
+
+        <!-- Quiz Container -->
+        <section id="quiz-section" class="hidden max-w-3xl mx-auto fade-in h-full py-4">
+            <div class="bg-surface rounded-3xl shadow-2xl overflow-hidden h-full flex flex-col border border-gray-100">
+                <div class="bg-secondary text-white p-6 flex justify-between items-center relative overflow-hidden">
+                    <div class="absolute inset-0 bg-primary opacity-50"></div>
+                    <h2 class="text-2xl font-bold relative z-10"><i class="fas fa-question-circle ml-2"></i>اختبار المعلومات</h2>
+                    <span class="bg-black/30 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-bold relative z-10 border border-white/20" id="question-counter">سؤال 1 / 12</span>
+                </div>
+                
+                <div class="p-8 md:p-12 flex-1 flex flex-col justify-center" id="quiz-body">
+                    <!-- Question injected here -->
+                    <h3 class="text-xl md:text-2xl font-bold mb-10 text-gray-800 leading-relaxed text-center" id="question-text"></h3>
+                    <div class="space-y-4" id="answers-container">
+                        <!-- Options injected here -->
+                    </div>
+                </div>
+
+                <!-- Feedback Area -->
+                <div id="feedback-area" class="hidden mx-8 mb-4 p-4 text-center font-bold text-white transition-all rounded-xl shadow-md"></div>
+
+                <div class="p-6 border-t border-gray-100 bg-gray-50 flex justify-between items-center">
+                    <div class="text-xl font-bold text-gray-700">النتيجة: <span id="current-score" class="text-primary">0</span></div>
+                    <button id="next-btn" onclick="nextQuestion()" class="bg-secondary text-white px-8 py-3 rounded-xl hover:bg-green-800 transition shadow-lg disabled:opacity-50 disabled:shadow-none" disabled>
+                        السؤال التالي <i class="fas fa-chevron-left mr-2"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quiz Result -->
+        <section id="quiz-result" class="hidden max-w-2xl mx-auto fade-in text-center pt-10">
+            <div class="bg-surface rounded-3xl shadow-2xl p-12 border border-gray-100 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-primary to-accent"></div>
+                <div class="w-28 h-28 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-8 animate-bounce">
+                    <i class="fas fa-trophy text-5xl text-primary"></i>
+                </div>
+                <h2 class="text-4xl font-extrabold text-gray-800 mb-4">اكتمل الاختبار!</h2>
+                <p class="text-xl text-gray-600 mb-10">لقد حصلت على <span id="final-score" class="font-extrabold text-primary text-3xl"></span> من <span id="total-questions" class="font-bold text-3xl"></span></p>
+                
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <button onclick="resetQuiz()" class="bg-primary text-white px-8 py-4 rounded-xl hover:bg-green-700 transition shadow-lg font-bold">
+                        إعادة الاختبار
+                    </button>
+                    <button onclick="showSection('intro')" class="bg-gray-100 text-gray-700 px-8 py-4 rounded-xl hover:bg-gray-200 transition font-bold">
+                        العودة للرئيسية
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // --- Data ---
+        const contentData = {
+            protein: {
+                title: "البروتين",
+                icon: "fa-drumstick-bite",
+                color: "green",
+                image: "https://images.unsplash.com/photo-1615485925763-867863774882?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                sections: [
+                    {
+                        header: "مصادر البروتين",
+                        content: `
+                            <div class="flex flex-col md:flex-row gap-6 items-start">
+                                <div class="flex-1">
+                                    <ul class="space-y-4">
+                                        <li class="flex items-start bg-green-50 p-3 rounded-lg"><span class="bg-primary text-white text-xs font-bold ml-3 px-2 py-1 rounded-full mt-1">المجترات</span> <span class="text-gray-700">الحبوب، البقوليات مثل البرسيم، والمكملات مثل كسب فول الصويا.</span></li>
+                                        <li class="flex items-start bg-green-50 p-3 rounded-lg"><span class="bg-primary text-white text-xs font-bold ml-3 px-2 py-1 rounded-full mt-1">الدواجن</span> <span class="text-gray-700">دقيق السمك، كسب فول الصويا، والحبوب المدعمة.</span></li>
+                                        <li class="flex items-start bg-green-50 p-3 rounded-lg"><span class="bg-primary text-white text-xs font-bold ml-3 px-2 py-1 rounded-full mt-1">الخيول</span> <span class="text-gray-700">العلف الجاف عالي الجودة، الحبوب، والبقوليات.</span></li>
+                                        <li class="flex items-start bg-green-50 p-3 rounded-lg"><span class="bg-primary text-white text-xs font-bold ml-3 px-2 py-1 rounded-full mt-1">النحل</span> <span class="text-gray-700">رحيق الأزهار وحبوب اللقاح (غنية بالبروتين).</span></li>
+                                        <li class="flex items-start bg-green-50 p-3 rounded-lg"><span class="bg-primary text-white text-xs font-bold ml-3 px-2 py-1 rounded-full mt-1">الكلاب</span> <span class="text-gray-700">اللحوم، الأسماك، البيض، ومنتجات الصويا.</span></li>
+                                    </ul>
+                                </div>
+                                <div class="w-full md:w-1/3">
+                                    <img src="https://images.unsplash.com/photo-1596733430284-f7437764b1a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" class="rounded-xl shadow-md w-full h-48 object-cover mb-4" alt="أبقار تتغذى">
+                                    <img src="https://images.unsplash.com/photo-1612166549216-562db4151246?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" class="rounded-xl shadow-md w-full h-48 object-cover" alt="علائق حيوانية">
+                                </div>
+                            </div>
+                        `
+                    },
+                    {
+                        header: "القيمة الغذائية والاقتصادية",
+                        content: `
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div class="bg-blue-50 p-6 rounded-2xl border border-blue-100 shadow-sm content-card">
+                                    <div class="flex items-center mb-3">
+                                        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 ml-3"><i class="fas fa-utensils"></i></div>
+                                        <h4 class="font-bold text-blue-800 text-lg">القيمة الغذائية</h4>
+                                    </div>
+                                    <p class="text-gray-600 leading-relaxed">تعتمد على محتواه من الأحماض الأمينية الأساسية، وقابليته للهضم. البروتين الجيد يوفر الأحماض اللازمة ويمتص بكفاءة.</p>
+                                </div>
+                                <div class="bg-yellow-50 p-6 rounded-2xl border border-yellow-100 shadow-sm content-card">
+                                    <div class="flex items-center mb-3">
+                                        <div class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center text-yellow-600 ml-3"><i class="fas fa-coins"></i></div>
+                                        <h4 class="font-bold text-yellow-800 text-lg">القيمة الاقتصادية</h4>
+                                    </div>
+                                    <p class="text-gray-600 leading-relaxed">يشكل جزءاً كبيراً من التكاليف. يجب اختيار مصادر فعالة (مثل بدائل أقل تكلفة) مع الحفاظ على الجودة.</p>
+                                </div>
+                            </div>
+                        `
+                    },
+                    {
+                        header: "هضم البروتين (مجترات vs أحادية المعدة)",
+                        content: `
+                            <div class="space-y-6">
+                                <div class="bg-white p-6 rounded-xl border-r-4 border-green-500 shadow-sm">
+                                    <h4 class="font-bold text-xl text-green-700 mb-3 flex items-center"><i class="fas fa-check-circle ml-2"></i>في المجترات (الأبقار والأغنام)</h4>
+                                    <p class="text-gray-600 text-sm mb-3 font-semibold bg-green-50 inline-block px-3 py-1 rounded">جهاز هضمي معقد (4 حجرات)</p>
+                                    <ul class="list-disc list-inside text-gray-700 space-y-2 marker:text-green-500">
+                                        <li><strong>الكرش:</strong> ميكروبات تحلل البروتين وتصنع أحماض أمينية (تكسير وإعادة تصنيع).</li>
+                                        <li>يتيح الاستفادة من بروتين منخفض الجودة.</li>
+                                        <li>يكتمل الهضم في المعدة الحقيقية (الأنفحة) والأمعاء.</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-white p-6 rounded-xl border-r-4 border-accent shadow-sm">
+                                    <h4 class="font-bold text-xl text-accent mb-3 flex items-center"><i class="fas fa-exclamation-circle ml-2"></i>في أحادية المعدة (دواجن، خيول، كلاب)</h4>
+                                    <p class="text-gray-600 text-sm mb-3 font-semibold bg-orange-50 inline-block px-3 py-1 rounded">جهاز هضمي بسيط</p>
+                                    <ul class="list-disc list-inside text-gray-700 space-y-2 marker:text-accent">
+                                        <li>يعتمد أساساً على <strong>الإنزيمات الهاضمة</strong> في المعدة والأمعاء.</li>
+                                        <li>تحتاج لبروتين ذي قيمة بيولوجية عالية لأنها لا تعيد تصنيعه.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        `
+                    }
+                ]
+            },
+            carbs: {
+                title: "الكربوهيدرات",
+                icon: "fa-bread-slice",
+                color: "amber",
+                image: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                sections: [
+                    {
+                        header: "المصادر والدور الطاقي",
+                        content: `
+                            <p class="mb-6 font-semibold text-gray-700 bg-amber-50 p-4 rounded-lg border border-amber-100 text-center text-lg">المصدر الرئيسي للطاقة في غذاء الحيوانات.</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
+                                    <h5 class="font-bold text-gray-800 mb-3 border-b pb-2">حيوانات المزرعة</h5>
+                                    <ul class="text-sm space-y-3">
+                                        <li class="flex items-center"><i class="fas fa-cow text-green-500 ml-3 text-lg"></i><span><strong>المجترات:</strong> حبوب (ذرة، شعير)، أعلاف خضراء.</span></li>
+                                        <li class="flex items-center"><i class="fas fa-kiwi-bird text-green-500 ml-3 text-lg"></i><span><strong>الدواجن:</strong> ذرة، قمح، بقوليات.</span></li>
+                                        <li class="flex items-center"><i class="fas fa-horse text-green-500 ml-3 text-lg"></i><span><strong>الخيول:</strong> تبن، شوفان (ألياف عالية).</span></li>
+                                    </ul>
+                                </div>
+                                <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
+                                    <h5 class="font-bold text-gray-800 mb-3 border-b pb-2">حيوانات أخرى</h5>
+                                    <ul class="text-sm space-y-3">
+                                        <li class="flex items-center"><i class="fas fa-bug text-green-500 ml-3 text-lg"></i><span><strong>النحل:</strong> رحيق الأزهار (يتحول لعسل).</span></li>
+                                        <li class="flex items-center"><i class="fas fa-dog text-green-500 ml-3 text-lg"></i><span><strong>الكلاب:</strong> حبوب وخضروات في الغذاء التجاري.</span></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="bg-gradient-to-r from-amber-100 to-orange-100 p-5 rounded-xl text-amber-900 text-sm shadow-inner flex items-center">
+                                <i class="fas fa-bolt text-3xl ml-4 text-amber-600"></i>
+                                <div>
+                                    <strong class="block text-lg mb-1">إنتاج الطاقة</strong>
+                                    تتحلل لسكريات بسيطة -> تمتص للدم -> طاقة (أيض). الفائض يخزن كجليكوجين أو دهون.
+                                </div>
+                            </div>
+                        `
+                    },
+                    {
+                        header: "آلية الهضم والاختلافات",
+                        content: `
+                            <div class="overflow-hidden rounded-xl border border-gray-200 shadow-sm">
+                                <table class="w-full text-sm text-right border-collapse bg-white">
+                                    <thead>
+                                        <tr class="bg-gray-800 text-white">
+                                            <th class="p-4 border-b border-gray-700 w-1/2">المجترات</th>
+                                            <th class="p-4 border-b border-gray-700 w-1/2">أحادية المعدة</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="p-6 border-l border-gray-200 align-top hover:bg-green-50 transition-colors">
+                                                <div class="mb-2 font-bold text-green-700">تخمر ميكروبي في الكرش</div>
+                                                <p class="text-gray-600 mb-2">تتحول لأحماض دهنية طيارة (مصدر طاقة).</p>
+                                                <span class="text-white bg-green-600 px-2 py-1 rounded text-xs">هضم عالي للألياف</span>
+                                            </td>
+                                            <td class="p-6 align-top hover:bg-red-50 transition-colors">
+                                                <div class="mb-2 font-bold text-red-700">هضم إنزيمي في الأمعاء</div>
+                                                <p class="text-gray-600 mb-2">تتحول لسكريات بسيطة.</p>
+                                                <span class="text-white bg-red-500 px-2 py-1 rounded text-xs">هضم ضعيف للألياف</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        `
+                    }
+                ]
+            },
+            fats: {
+                title: "الدهون",
+                icon: "fa-oil-can",
+                color: "yellow",
+                image: "https://images.unsplash.com/photo-1474979266404-7caddbed77a5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                sections: [
+                    {
+                        header: "المصادر والقيمة الغذائية",
+                        content: `
+                            <div class="flex flex-col md:flex-row gap-6 mb-6">
+                                <div class="flex-1 bg-yellow-50 p-6 rounded-2xl border border-yellow-200 flex items-center shadow-sm">
+                                    <div class="w-16 h-16 bg-yellow-500 rounded-full flex items-center justify-center text-white text-3xl ml-6 shadow-lg animate-pulse"><i class="fas fa-bolt"></i></div>
+                                    <div>
+                                        <h4 class="font-bold text-xl text-gray-800 mb-1">مخزن الطاقة المركز</h4>
+                                        <p class="text-gray-700">توفر <strong class="text-red-600 text-lg">9</strong> سعرات/غم (مقابل 4 للكربوهيدرات والبروتين). ضرورية لامتصاص فيتامينات (A, D, E, K).</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <h5 class="font-bold text-gray-800 text-lg mb-4 flex items-center"><i class="fas fa-leaf text-green-600 ml-2"></i>المصادر الطبيعية:</h5>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <div class="bg-white p-4 rounded-xl border border-gray-200 text-center shadow-sm hover:border-yellow-400 transition">
+                                    <i class="fas fa-cow text-3xl text-gray-400 mb-2"></i>
+                                    <h6 class="font-bold text-gray-700">المجترات</h6>
+                                    <p class="text-xs text-gray-500 mt-1">مكملات (زيت صويا، شحوم)</p>
+                                </div>
+                                <div class="bg-white p-4 rounded-xl border border-gray-200 text-center shadow-sm hover:border-yellow-400 transition">
+                                    <i class="fas fa-crow text-3xl text-gray-400 mb-2"></i>
+                                    <h6 class="font-bold text-gray-700">الدواجن</h6>
+                                    <p class="text-xs text-gray-500 mt-1">زيوت نباتية ودهون حيوانية</p>
+                                </div>
+                                <div class="bg-white p-4 rounded-xl border border-gray-200 text-center shadow-sm hover:border-yellow-400 transition">
+                                    <i class="fas fa-horse-head text-3xl text-gray-400 mb-2"></i>
+                                    <h6 class="font-bold text-gray-700">الخيول</h6>
+                                    <p class="text-xs text-gray-500 mt-1">زيوت نباتية كمكملات</p>
+                                </div>
+                            </div>
+                        `
+                    },
+                    {
+                        header: "هضم الدهون",
+                        content: `
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="bg-white p-6 shadow-md rounded-xl border-t-4 border-green-500">
+                                    <strong class="block text-green-700 text-lg mb-2"><i class="fas fa-check ml-2"></i>في المجترات</strong>
+                                    <p class="text-gray-600 text-sm leading-relaxed">تبدأ في الكرش (تحلل ميكروبي لأحماض دهنية) -> ثم الامتصاص في الأمعاء الدقيقة.</p>
+                                </div>
+                                <div class="bg-white p-6 shadow-md rounded-xl border-t-4 border-accent">
+                                    <strong class="block text-accent text-lg mb-2"><i class="fas fa-check ml-2"></i>في أحادية المعدة</strong>
+                                    <p class="text-gray-600 text-sm leading-relaxed">بواسطة الصفراء وإنزيم الليباز في الأمعاء الدقيقة (امتصاص عالٍ للكفاءة).</p>
+                                </div>
+                            </div>
+                        `
+                    }
+                ]
+            },
+            minerals: {
+                title: "المعادن والفيتامينات",
+                icon: "fa-vial",
+                color: "secondary", // Using secondary from palette
+                image: "https://images.unsplash.com/photo-1615486511484-92e590508b95?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                sections: [
+                    {
+                        header: "المعادن الرئيسية ووظائفها",
+                        content: `
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm mb-6">
+                                <div class="bg-purple-50 p-4 rounded-xl border border-purple-100 flex items-start">
+                                    <div class="w-8 h-8 rounded-full bg-purple-200 text-purple-700 flex items-center justify-center ml-3 font-bold">Ca</div>
+                                    <div>
+                                        <strong class="text-purple-900 block mb-1">الكالسيوم والفسفور</strong>
+                                        <span class="text-gray-600">بناء العظام والأسنان (حليب، عظام مطحونة).</span>
+                                    </div>
+                                </div>
+                                <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 flex items-start">
+                                    <div class="w-8 h-8 rounded-full bg-blue-200 text-blue-700 flex items-center justify-center ml-3 font-bold">Na</div>
+                                    <div>
+                                        <strong class="text-blue-900 block mb-1">الصوديوم والبوتاسيوم</strong>
+                                        <span class="text-gray-600">توازن السوائل (ملح، أعلاف خضراء).</span>
+                                    </div>
+                                </div>
+                                <div class="bg-red-50 p-4 rounded-xl border border-red-100 flex items-start">
+                                    <div class="w-8 h-8 rounded-full bg-red-200 text-red-700 flex items-center justify-center ml-3 font-bold">Fe</div>
+                                    <div>
+                                        <strong class="text-red-900 block mb-1">الحديد</strong>
+                                        <span class="text-gray-600">تكوين الدم (كبد، حبوب).</span>
+                                    </div>
+                                </div>
+                                <div class="bg-teal-50 p-4 rounded-xl border border-teal-100 flex items-start">
+                                    <div class="w-8 h-8 rounded-full bg-teal-200 text-teal-700 flex items-center justify-center ml-3 font-bold">I</div>
+                                    <div>
+                                        <strong class="text-teal-900 block mb-1">اليود</strong>
+                                        <span class="text-gray-600">نشاط الغدة الدرقية.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 bg-gray-100 p-4 rounded-xl text-sm border-r-4 border-gray-600 flex items-center">
+                                <img src="https://images.unsplash.com/photo-1627447432087-9759c3f3f2d2?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" class="w-16 h-16 rounded-lg object-cover ml-4 shadow-sm" alt="ملح">
+                                <div>
+                                    <strong class="block text-gray-800 text-base mb-1">أحجار اللعق (اللحس)</strong>
+                                    مصدر فعال لتزويد الأبقار والأغنام بالمعادن (صوديوم، كلور، كالسيوم).
+                                </div>
+                            </div>
+                        `
+                    },
+                    {
+                        header: "الفيتامينات",
+                        content: `
+                            <div class="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
+                                <table class="w-full text-xs md:text-sm text-right bg-white">
+                                    <thead>
+                                        <tr class="bg-gray-800 text-white"><th class="p-3 text-lg" colspan="3"><i class="fas fa-tint ml-2 text-yellow-400"></i>ذائبة في الدهون</th></tr>
+                                    </thead>
+                                    <tbody class="divide-y">
+                                        <tr class="hover:bg-gray-50"><td class="p-3 font-bold text-center bg-gray-100 w-12 text-lg">A</td><td class="p-3 font-semibold">الرؤية والجلد</td><td class="p-3 text-gray-500">جزر، أعلاف خضراء</td></tr>
+                                        <tr class="hover:bg-gray-50"><td class="p-3 font-bold text-center bg-gray-100 w-12 text-lg">D</td><td class="p-3 font-semibold">صحة العظام</td><td class="p-3 text-gray-500">الشمس</td></tr>
+                                        <tr class="hover:bg-gray-50"><td class="p-3 font-bold text-center bg-gray-100 w-12 text-lg">E</td><td class="p-3 font-semibold">مضاد أكسدة</td><td class="p-3 text-gray-500">زيوت نباتية</td></tr>
+                                        <tr class="hover:bg-gray-50"><td class="p-3 font-bold text-center bg-gray-100 w-12 text-lg">K</td><td class="p-3 font-semibold">تخثر الدم</td><td class="p-3 text-gray-500">خضروات ورقية</td></tr>
+                                    </tbody>
+                                    <thead>
+                                        <tr class="bg-blue-700 text-white"><th class="p-3 text-lg" colspan="3"><i class="fas fa-water ml-2 text-blue-300"></i>ذائبة في الماء</th></tr>
+                                    </thead>
+                                    <tbody class="divide-y">
+                                        <tr class="hover:bg-blue-50"><td class="p-3 font-bold text-center bg-blue-100 w-12 text-lg">C</td><td class="p-3 font-semibold">مضاد أكسدة</td><td class="p-3 text-gray-500">فواكه</td></tr>
+                                        <tr class="hover:bg-blue-50"><td class="p-3 font-bold text-center bg-blue-100 w-12 text-lg">B</td><td class="p-3 font-semibold">الأيض</td><td class="p-3 text-gray-500">خميرة، حبوب</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        `
+                    }
+                ]
+            },
+            water: {
+                title: "الماء",
+                icon: "fa-tint",
+                color: "blue", // Keep blue but adapt shades
+                image: "https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                sections: [
+                    {
+                        header: "أهمية الماء في الإنتاج الحيواني",
+                        content: `
+                            <div class="grid md:grid-cols-3 gap-6 text-center mb-6">
+                                <div class="bg-blue-50 p-6 rounded-2xl content-card border border-blue-100">
+                                    <i class="fas fa-glass-whiskey text-blue-500 text-4xl mb-4"></i>
+                                    <h5 class="font-bold text-gray-800 text-lg mb-2">الحليب</h5>
+                                    <p class="text-sm text-gray-600 bg-white p-2 rounded-lg shadow-sm">3-5 لتر ماء لكل 1 لتر حليب.</p>
+                                </div>
+                                <div class="bg-blue-50 p-6 rounded-2xl content-card border border-blue-100">
+                                    <i class="fas fa-egg text-blue-500 text-4xl mb-4"></i>
+                                    <h5 class="font-bold text-gray-800 text-lg mb-2">البيض</h5>
+                                    <p class="text-sm text-gray-600 bg-white p-2 rounded-lg shadow-sm">الماء يشكل 70-75% من البيضة.</p>
+                                </div>
+                                <div class="bg-blue-50 p-6 rounded-2xl content-card border border-blue-100">
+                                    <i class="fas fa-temperature-high text-blue-500 text-4xl mb-4"></i>
+                                    <h5 class="font-bold text-gray-800 text-lg mb-2">الحرارة</h5>
+                                    <p class="text-sm text-gray-600 bg-white p-2 rounded-lg shadow-sm">تبريد الجسم (تعرق أو لهاث).</p>
+                                </div>
+                            </div>
+                            <div class="p-4 bg-gray-50 rounded-xl border border-gray-200 text-gray-700 text-sm flex items-center">
+                                <i class="fas fa-info-circle text-2xl text-blue-400 ml-4"></i>
+                                <span><strong>الماء الحر vs المرتبط:</strong> الحر هو ماء الشرب، المرتبط موجود داخل الأعلاف (مثل الأعلاف الخضراء 70-80% ماء).</span>
+                            </div>
+                        `
+                    },
+                    {
+                        header: "الاحتياجات اليومية وطرق التقديم",
+                        content: `
+                            <div class="flex flex-col md:flex-row gap-6">
+                                <div class="flex-1">
+                                    <ul class="space-y-3 text-sm mb-4">
+                                        <li class="flex items-center justify-between bg-white p-3 rounded-lg shadow-sm border border-gray-100"><span class="font-bold text-gray-800"><i class="fas fa-cow ml-2 text-gray-400"></i>الأبقار</span> <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full font-bold">60-100 لتر</span></li>
+                                        <li class="flex items-center justify-between bg-white p-3 rounded-lg shadow-sm border border-gray-100"><span class="font-bold text-gray-800"><i class="fas fa-horse ml-2 text-gray-400"></i>الخيول</span> <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full font-bold">20-30 لتر</span></li>
+                                        <li class="flex items-center justify-between bg-white p-3 rounded-lg shadow-sm border border-gray-100"><span class="font-bold text-gray-800"><i class="fas fa-crow ml-2 text-gray-400"></i>الدواجن</span> <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full font-bold">250-300 مل</span></li>
+                                        <li class="flex items-center justify-between bg-white p-3 rounded-lg shadow-sm border border-gray-100"><span class="font-bold text-gray-800"><i class="fas fa-sheep ml-2 text-gray-400"></i>الأغنام</span> <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full font-bold">4-6 لترات</span></li>
+                                    </ul>
+                                    <div class="bg-red-50 text-red-800 p-4 text-sm rounded-xl border border-red-100 flex items-center">
+                                        <i class="fas fa-exclamation-triangle text-2xl ml-4"></i>
+                                        جودة الماء ضرورية: التلوث يسبب تسمم وانخفاض الإنتاج.
+                                    </div>
+                                </div>
+                                <div class="w-full md:w-1/3">
+                                     <img src="https://images.unsplash.com/photo-1544976735-e51c86518423?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" class="rounded-xl shadow-md w-full h-full object-cover" alt="ماء">
+                                </div>
+                            </div>
+                        `
+                    }
+                ]
+            },
+            systems: {
+                title: "نظم التغذية والهضم",
+                icon: "fa-clipboard-list",
+                color: "gray",
+                image: "https://images.unsplash.com/photo-1516467508483-a72120608869?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                sections: [
+                    {
+                        header: "الأبقار والأغنام (المجترات)",
+                        content: `
+                            <div class="flex items-start">
+                                <div class="bg-green-100 rounded-full w-10 h-10 flex items-center justify-center text-green-700 ml-4 flex-shrink-0 font-bold">1</div>
+                                <div>
+                                    <p class="text-sm mb-2 text-gray-700"><strong>الخصائص:</strong> معدة متعددة الحجرات (كرش، شبكة، تلافيف، منفحة). اجترار الطعام.</p>
+                                    <p class="text-sm mb-2 text-gray-700"><strong>الهضم التكافلي:</strong> بكتيريا الكرش تحلل السليلوز إلى طاقة وتحول البروتين غير المهضوم إلى بروتين ميكروبي.</p>
+                                    <p class="text-sm text-gray-700"><strong>التغذية:</strong> أعلاف خشنة (قش، سيلاج) + مركزة (ذرة، شعير) + معادن.</p>
+                                </div>
+                            </div>
+                        `
+                    },
+                    {
+                        header: "الدواجن",
+                        content: `
+                            <div class="flex items-start">
+                                <div class="bg-orange-100 rounded-full w-10 h-10 flex items-center justify-center text-orange-700 ml-4 flex-shrink-0 font-bold">2</div>
+                                <div>
+                                    <p class="text-sm mb-2 text-gray-700"><strong>الخصائص:</strong> قانصة (طحن ميكانيكي بالحصى) + معدة غدية.</p>
+                                    <p class="text-sm text-gray-700"><strong>التغذية:</strong> حبوب (ذرة)، أعلاف جاهزة، كالسيوم (للقشرة).</p>
+                                </div>
+                            </div>
+                        `
+                    },
+                    {
+                        header: "الخيول",
+                        content: `
+                            <div class="flex items-start">
+                                <div class="bg-yellow-100 rounded-full w-10 h-10 flex items-center justify-center text-yellow-700 ml-4 flex-shrink-0 font-bold">3</div>
+                                <div class="w-full">
+                                    <p class="text-sm mb-2 text-gray-700"><strong>الخصائص:</strong> معدة بسيطة، أمعاء طويلة، معي أعور (لهضم الألياف).</p>
+                                    <div class="bg-green-50 p-3 rounded-lg text-center font-bold text-green-800 mb-2 border border-green-200 shadow-sm w-full">
+                                        معادلة الغذاء: 70% علف خشن + 30% علف مركز
+                                    </div>
+                                    <p class="text-sm text-gray-600">يضمن التوازن بين الطاقة وصحة الجهاز الهضمي.</p>
+                                </div>
+                            </div>
+                        `
+                    },
+                    {
+                        header: "النحل والكلاب",
+                        content: `
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                                <div class="bg-amber-50 p-4 rounded-xl border border-amber-100">
+                                    <strong class="text-amber-700 text-lg block mb-2"><i class="fas fa-bug ml-2"></i>النحل</strong>
+                                    رحيق وعسل (طاقة)، حبوب لقاح (بروتين). التغذية بمحاليل سكرية في الشتاء.
+                                </div>
+                                <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                    <strong class="text-gray-700 text-lg block mb-2"><i class="fas fa-dog ml-2"></i>الكلاب</strong>
+                                    معدة بسيطة مهيأة للحوم. بروتين حيواني، كربوهيدرات (أرز)، دهون.
+                                </div>
+                            </div>
+                        `
+                    }
+                ]
+            }
+        };
+
+        const quizData = [
+            {
+                question: "أين تتم عملية هضم الألياف الغذائية بكفاءة عالية؟",
+                options: ["في معدة الكلاب", "في الكرش عند المجترات", "في أمعاء الدواجن", "في المعدة الغدية"],
+                correct: 1,
+                feedback: "صحيح! تحتوي الكرش على ميكروبات تخمر الألياف وتحولها لطاقة."
+            },
+            {
+                question: "ما هو المصدر الرئيسي للبروتين عند النحل؟",
+                options: ["رحيق الأزهار", "العسل", "حبوب اللقاح", "محلول السكر"],
+                correct: 2,
+                feedback: "أحسنت! حبوب اللقاح هي مصدر البروتين، بينما الرحيق مصدر للطاقة."
+            },
+            {
+                question: "كم سعرة حرارية يوفر الغرام الواحد من الدهون؟",
+                options: ["4 سعرات", "5 سعرات", "7 سعرات", "9 سعرات"],
+                correct: 3,
+                feedback: "ممتاز. الدهون توفر طاقة مضاعفة تقريباً مقارنة بالبروتين والكربوهيدرات."
+            },
+            {
+                question: "ما هي نسبة العلف الخشن الموصى بها في غذاء الخيول؟",
+                options: ["30%", "50%", "70%", "90%"],
+                correct: 2,
+                feedback: "صحيح. التركيبة المثالية هي 70% علف خشن و 30% علف مركز."
+            },
+            {
+                question: "أي جزء في جهاز الدواجن الهضمي مسؤول عن الطحن الميكانيكي للطعام؟",
+                options: ["المعدة الغدية", "القانصة", "الأمعاء الدقيقة", "الحوصلة"],
+                correct: 1,
+                feedback: "أحسنت. القانصة تستخدم الحصى لتكسير الطعام ميكانيكياً."
+            },
+            {
+                question: "ما هي وظيفة فيتامين K الرئيسية؟",
+                options: ["تقوية النظر", "صحة العظام", "تخثر الدم", "مضاد أكسدة"],
+                correct: 2,
+                feedback: "صحيح. فيتامين K ضروري لعملية تخثر الدم."
+            },
+            {
+                question: "لماذا تحتاج الأبقار لكميات كبيرة من الماء؟",
+                options: ["لإنتاج الحليب", "لتنظيم الحرارة", "لعمليات الهضم", "كل ما ذكر صحيح"],
+                correct: 3,
+                feedback: "إجابة صحيحة. الماء ضروري لكل هذه العمليات الحيوية والإنتاجية."
+            },
+            {
+                question: "تختلف الحيوانات أحادية المعدة عن المجترات في هضم البروتين بأنها:",
+                options: ["تعتمد على الميكروبات", "تعتمد على الإنزيمات الهاضمة", "يمكنها الاستفادة من بروتين منخفض الجودة", "لديها 4 حجرات معدية"],
+                correct: 1,
+                feedback: "صحيح. أحادية المعدة تعتمد أساساً على الإنزيمات وتحتاج بروتيناً عالي الجودة."
+            },
+            {
+                question: "ما هو 'الماء المرتبط'؟",
+                options: ["ماء الشرب في الأحواض", "الماء الموجود داخل مكونات العلف", "الماء الملوث", "الماء المستخدم للتنظيف"],
+                correct: 1,
+                feedback: "أحسنت. الماء المرتبط هو الذي يكون جزءاً من تركيبة العلف (مثل العلف الأخضر)."
+            },
+            {
+                question: "ما هو الغرض من أحجار اللعق (اللحس)؟",
+                options: ["توفير البروتين", "توفير الطاقة", "توفير المعادن والأملاح", "توفير الفيتامينات"],
+                correct: 2,
+                feedback: "صحيح. تمد الحيوانات بالصوديوم والكلور والمعادن."
+            },
+            {
+                question: "أين يتم تخزين فائض الكربوهيدرات في الجسم؟",
+                options: ["في العظام", "كجليكوجين في الكبد والعضلات", "يتم إخراجه فوراً", "يتحول لبروتين"],
+                correct: 1,
+                feedback: "ممتاز. يخزن كجليكوجين أو يتحول لدهون."
+            },
+            {
+                question: "ما هو العنصر الغذائي المسؤول عن بناء العظام والأسنان؟",
+                options: ["الحديد", "اليود", "الكالسيوم والفسفور", "البوتاسيوم"],
+                correct: 2,
+                feedback: "إجابة صحيحة."
+            }
+        ];
+
+        // --- UI Logic ---
+        let currentQuizIndex = 0;
+        let score = 0;
+
+        function showSection(sectionId) {
+            // Hide intro and result
+            document.getElementById('intro').classList.add('hidden');
+            document.getElementById('quiz-result').classList.add('hidden');
+            document.getElementById('quiz-section').classList.add('hidden');
+            
+            // Clear Content Container
+            const container = document.getElementById('content-container');
+            container.innerHTML = '';
+
+            // Reset Active Nav Button
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.remove('bg-green-800');
+            });
+
+            if (sectionId === 'intro') {
+                document.getElementById('intro').classList.remove('hidden');
+                document.getElementById('btn-intro').classList.add('active');
+                return;
+            }
+
+            // Activate Nav Button
+            const btn = document.getElementById(`btn-${sectionId}`);
+            if(btn) btn.classList.add('active');
+
+            // Render Content
+            const data = contentData[sectionId];
+            if (data) {
+                // Header Card with Image
+                const headerHtml = `
+                    <div class="bg-surface rounded-3xl shadow-lg mb-8 fade-in overflow-hidden border border-gray-100">
+                        <div class="relative h-48 bg-gray-200">
+                            <img src="${data.image}" alt="${data.title}" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-black/40 flex items-center">
+                                <div class="px-8 flex items-center">
+                                    <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center ml-6 flex-shrink-0 border border-white/30">
+                                        <i class="fas ${data.icon} text-3xl text-white"></i>
+                                    </div>
+                                    <div>
+                                        <h2 class="text-4xl font-extrabold text-white drop-shadow-md">${data.title}</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += headerHtml;
+
+                // Section Cards
+                data.sections.forEach((sec, index) => {
+                    const sectionHtml = `
+                        <article class="bg-surface rounded-3xl shadow-sm border border-gray-100 overflow-hidden mb-6 fade-in content-card" style="animation-delay: ${index * 0.1}s">
+                            <div class="bg-gray-50 px-8 py-5 border-b border-gray-100 flex items-center">
+                                <div class="w-2 h-8 bg-primary rounded-full ml-3"></div>
+                                <h3 class="font-bold text-xl text-gray-800">${sec.header}</h3>
+                            </div>
+                            <div class="p-8 text-gray-700 leading-relaxed">
+                                ${sec.content}
+                            </div>
+                        </article>
+                    `;
+                    container.innerHTML += sectionHtml;
+                });
+            }
+            
+            // Scroll top
+            document.getElementById('main-scroll').scrollTop = 0;
+        }
+
+        // --- Quiz Logic ---
+        function startQuiz() {
+            // Reset UI
+            document.getElementById('intro').classList.add('hidden');
+            document.getElementById('content-container').innerHTML = '';
+            document.getElementById('quiz-result').classList.add('hidden');
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            
+            // Show Quiz
+            document.getElementById('quiz-section').classList.remove('hidden');
+            
+            currentQuizIndex = 0;
+            score = 0;
+            document.getElementById('current-score').innerText = 0;
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const q = quizData[currentQuizIndex];
+            document.getElementById('question-counter').innerText = `سؤال ${currentQuizIndex + 1} / ${quizData.length}`;
+            document.getElementById('question-text').innerText = q.question;
+            
+            const answersContainer = document.getElementById('answers-container');
+            answersContainer.innerHTML = '';
+            
+            q.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'w-full text-right p-5 rounded-2xl border-2 border-gray-100 bg-white hover:border-primary hover:bg-green-50 transition-all font-bold text-gray-700 text-lg shadow-sm';
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(index, btn);
+                answersContainer.appendChild(btn);
+            });
+
+            document.getElementById('next-btn').disabled = true;
+            document.getElementById('next-btn').classList.add('opacity-50', 'shadow-none');
+            document.getElementById('feedback-area').classList.add('hidden');
+            document.getElementById('feedback-area').className = 'hidden mx-8 mb-4 p-4 text-center font-bold text-white transition-all rounded-xl shadow-md mt-4';
+        }
+
+        function checkAnswer(selectedIndex, btnElement) {
+            // Disable all buttons
+            const buttons = document.getElementById('answers-container').children;
+            for (let btn of buttons) {
+                btn.disabled = true;
+                btn.classList.add('opacity-70');
+                btn.classList.remove('hover:border-primary', 'hover:bg-green-50');
+            }
+            btnElement.classList.remove('opacity-70');
+
+            const q = quizData[currentQuizIndex];
+            const feedbackEl = document.getElementById('feedback-area');
+            
+            if (selectedIndex === q.correct) {
+                score++;
+                document.getElementById('current-score').innerText = score;
+                btnElement.classList.remove('border-gray-100', 'bg-white');
+                btnElement.classList.add('bg-primary', 'text-white', 'border-primary');
+                feedbackEl.innerText = q.feedback;
+                feedbackEl.classList.add('bg-primary');
+                feedbackEl.innerHTML = `<i class="fas fa-check-circle text-2xl mb-1 block"></i> ${q.feedback}`;
+            } else {
+                btnElement.classList.remove('border-gray-100', 'bg-white');
+                btnElement.classList.add('bg-red-500', 'text-white', 'border-red-500');
+                
+                // Highlight correct answer
+                buttons[q.correct].classList.remove('opacity-70', 'border-gray-100', 'bg-white');
+                buttons[q.correct].classList.add('bg-primary', 'text-white', 'border-primary');
+                
+                feedbackEl.innerText = `خطأ! الإجابة الصحيحة: ${q.options[q.correct]}`;
+                feedbackEl.classList.add('bg-red-500');
+                feedbackEl.innerHTML = `<i class="fas fa-times-circle text-2xl mb-1 block"></i> خطأ! الإجابة الصحيحة: ${q.options[q.correct]}`;
+            }
+
+            feedbackEl.classList.remove('hidden');
+            document.getElementById('next-btn').disabled = false;
+            document.getElementById('next-btn').classList.remove('opacity-50', 'shadow-none');
+        }
+
+        function nextQuestion() {
+            currentQuizIndex++;
+            if (currentQuizIndex < quizData.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('quiz-section').classList.add('hidden');
+            document.getElementById('quiz-result').classList.remove('hidden');
+            document.getElementById('final-score').innerText = score;
+            document.getElementById('total-questions').innerText = quizData.length;
+        }
+
+        function resetQuiz() {
+            startQuiz();
+        }
+
+    </script>
+</body>
+</html>
